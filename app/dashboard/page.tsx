@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { SpeedTestResult } from "@/types/speed-test";
 import { getSpeedTestHistory } from "@/lib/supabase/queries";
 import { formatSpeed, formatPing, formatDate } from "@/lib/utils";
-import { BarChart2, TrendingUp, Zap, Clock, ShieldCheck } from "lucide-react";
+import { BarChart2, TrendingUp, Clock } from "lucide-react";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -30,27 +30,27 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="py-20 text-center text-xs font-mono text-muted-foreground animate-pulse">
-        Calculating network metrics & generating trend graphs...
+      <div className="py-20 text-center text-xs font-mono text-slate-500 animate-pulse">
+        Aggregating measurement statistics...
       </div>
     );
   }
 
   if (history.length === 0) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-16 text-center space-y-4">
-        <div className="p-4 rounded-2xl bg-cyan-500/10 text-cyan-400 w-fit mx-auto">
+      <div className="mx-auto max-w-4xl px-4 py-16 text-center space-y-4">
+        <div className="p-3 rounded-sm bg-slate-100 text-[#0f2942] w-fit mx-auto border border-slate-300">
           <BarChart2 className="h-8 w-8" />
         </div>
-        <h2 className="text-xl font-bold text-foreground">No Analytics Available</h2>
-        <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-          Your network statistics will appear here after you save your first speed test.
+        <h2 className="text-lg font-bold text-[#0f2942]">No Dashboard Data Available</h2>
+        <p className="text-xs text-slate-600 max-w-sm mx-auto">
+          Your aggregated network performance statistics will appear here after you complete and log a speed test.
         </p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-[#0f2942] hover:bg-[#1e3a8a] text-white font-bold text-xs uppercase tracking-wider"
         >
-          Run Speed Test
+          START SPEED TEST
         </Link>
       </div>
     );
@@ -62,10 +62,6 @@ export default function DashboardPage() {
   const avgUpload = history.reduce((acc, h) => acc + h.upload_mbps, 0) / totalTests;
   const avgPing = history.reduce((acc, h) => acc + h.ping_ms, 0) / totalTests;
 
-  const bestDownload = Math.max(...history.map((h) => h.download_mbps));
-  const bestUpload = Math.max(...history.map((h) => h.upload_mbps));
-
-  // Reverse chronological for time series chart (oldest to newest)
   const chartData = [...history]
     .reverse()
     .map((h) => ({
@@ -73,126 +69,105 @@ export default function DashboardPage() {
       download: Number(h.download_mbps.toFixed(2)),
       upload: Number(h.upload_mbps.toFixed(2)),
       ping: Number(h.ping_ms.toFixed(1)),
-      score: h.score,
     }));
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 space-y-6 font-sans">
       {/* Page Title */}
-      <div className="border-b border-border/60 pb-6">
-        <div className="flex items-center gap-2 text-cyan-400 text-xs font-mono font-semibold uppercase tracking-wider mb-1">
+      <div className="bg-white p-6 rounded-sm border border-slate-300 shadow-sm space-y-1">
+        <div className="flex items-center gap-2 text-[#0f2942] text-xs font-mono font-bold uppercase tracking-wider">
           <BarChart2 className="h-4 w-4" />
           Analytics Hub
         </div>
-        <h1 className="text-3xl font-black tracking-tight text-foreground">Performance Dashboard</h1>
-        <p className="text-xs text-muted-foreground mt-1">Aggregated statistics and historical network speed trends.</p>
+        <h1 className="text-2xl sm:text-3xl font-black text-[#0f2942]">Network Performance Dashboard</h1>
+        <p className="text-xs text-slate-600">Aggregated throughput statistics and latency time series trend graphs.</p>
       </div>
 
-      {/* Top 5 Key Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <div className="glass-panel p-5 rounded-2xl border border-border/60">
-          <div className="text-[11px] font-semibold text-muted-foreground uppercase">Avg Download</div>
-          <div className="text-2xl font-black font-mono text-cyan-400 mt-1">{formatSpeed(avgDownload).value}</div>
-          <div className="text-[10px] text-muted-foreground mt-0.5">{formatSpeed(avgDownload).unit}</div>
+      {/* 4 Summary Stats Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white p-5 rounded-sm border border-slate-300 shadow-sm">
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Average Download</div>
+          <div className="text-2xl font-black font-mono text-[#0f2942] mt-1">{formatSpeed(avgDownload).value}</div>
+          <div className="text-[10px] text-slate-500 font-bold mt-0.5">{formatSpeed(avgDownload).unit}</div>
         </div>
 
-        <div className="glass-panel p-5 rounded-2xl border border-border/60">
-          <div className="text-[11px] font-semibold text-muted-foreground uppercase">Avg Upload</div>
-          <div className="text-2xl font-black font-mono text-blue-400 mt-1">{formatSpeed(avgUpload).value}</div>
-          <div className="text-[10px] text-muted-foreground mt-0.5">{formatSpeed(avgUpload).unit}</div>
+        <div className="bg-white p-5 rounded-sm border border-slate-300 shadow-sm">
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Average Upload</div>
+          <div className="text-2xl font-black font-mono text-blue-900 mt-1">{formatSpeed(avgUpload).value}</div>
+          <div className="text-[10px] text-slate-500 font-bold mt-0.5">{formatSpeed(avgUpload).unit}</div>
         </div>
 
-        <div className="glass-panel p-5 rounded-2xl border border-border/60">
-          <div className="text-[11px] font-semibold text-muted-foreground uppercase">Avg Ping</div>
-          <div className="text-2xl font-black font-mono text-indigo-400 mt-1">{formatPing(avgPing)}</div>
-          <div className="text-[10px] text-muted-foreground mt-0.5">ms latency</div>
+        <div className="bg-white p-5 rounded-sm border border-slate-300 shadow-sm">
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Average Latency</div>
+          <div className="text-2xl font-black font-mono text-[#0f2942] mt-1">{formatPing(avgPing)}</div>
+          <div className="text-[10px] text-slate-500 font-bold mt-0.5">ms (Ping)</div>
         </div>
 
-        <div className="glass-panel p-5 rounded-2xl border border-border/60">
-          <div className="text-[11px] font-semibold text-muted-foreground uppercase">Peak Download</div>
-          <div className="text-2xl font-black font-mono text-emerald-400 mt-1">{formatSpeed(bestDownload).value}</div>
-          <div className="text-[10px] text-muted-foreground mt-0.5">{formatSpeed(bestDownload).unit}</div>
-        </div>
-
-        <div className="glass-panel p-5 rounded-2xl border border-border/60 col-span-2 lg:col-span-1">
-          <div className="text-[11px] font-semibold text-muted-foreground uppercase">Tests Saved</div>
-          <div className="text-2xl font-black font-mono text-foreground mt-1">{totalTests}</div>
-          <div className="text-[10px] text-muted-foreground mt-0.5">Total logs</div>
+        <div className="bg-white p-5 rounded-sm border border-slate-300 shadow-sm">
+          <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Measurements Logged</div>
+          <div className="text-2xl font-black font-mono text-[#0f2942] mt-1">{totalTests}</div>
+          <div className="text-[10px] text-slate-500 font-bold mt-0.5">Completed Logs</div>
         </div>
       </div>
 
       {/* Main Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Speed Trend Area Chart */}
-        <div className="glass-panel p-6 rounded-2xl border border-border/60 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-cyan-400" />
-              Bandwidth Speed History
+        <div className="bg-white p-6 rounded-sm border border-slate-300 shadow-sm space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-[#0f2942] uppercase flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-blue-700" />
+              Download & Upload Throughput Trend
             </h3>
-            <span className="text-[10px] font-mono text-muted-foreground">Download vs Upload (Mbps)</span>
+            <span className="text-[10px] font-mono text-slate-500">Mbps</span>
           </div>
 
-          <div className="h-64 w-full pt-4">
+          <div className="h-60 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="dashDl" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="dashUl" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
                 <XAxis dataKey="date" stroke="#64748b" fontSize={10} tickLine={false} />
                 <YAxis stroke="#64748b" fontSize={10} tickLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "rgba(15, 23, 42, 0.9)",
-                    borderColor: "rgba(255, 255, 255, 0.1)",
-                    borderRadius: "8px",
-                    fontSize: "12px",
+                    backgroundColor: "#0f2942",
+                    borderColor: "#334155",
+                    borderRadius: "4px",
+                    fontSize: "11px",
+                    color: "#ffffff",
                   }}
                 />
-                <Area type="monotone" dataKey="download" name="Download" stroke="#06b6d4" strokeWidth={2} fill="url(#dashDl)" />
-                <Area type="monotone" dataKey="upload" name="Upload" stroke="#3b82f6" strokeWidth={2} fill="url(#dashUl)" />
+                <Area type="monotone" dataKey="download" name="Download" stroke="#0f2942" strokeWidth={2} fill="#0f2942" fillOpacity={0.1} />
+                <Area type="monotone" dataKey="upload" name="Upload" stroke="#0284c7" strokeWidth={2} fill="#0284c7" fillOpacity={0.1} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Latency History Chart */}
-        <div className="glass-panel p-6 rounded-2xl border border-border/60 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-              <Clock className="h-4 w-4 text-indigo-400" />
-              Latency & Ping Stability
+        <div className="bg-white p-6 rounded-sm border border-slate-300 shadow-sm space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-[#0f2942] uppercase flex items-center gap-2">
+              <Clock className="h-4 w-4 text-blue-700" />
+              Latency & Ping Stability Trend
             </h3>
-            <span className="text-[10px] font-mono text-muted-foreground">Ping (ms)</span>
+            <span className="text-[10px] font-mono text-slate-500">ms</span>
           </div>
 
-          <div className="h-64 w-full pt-4">
+          <div className="h-60 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="dashPing" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#818cf8" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#818cf8" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
                 <XAxis dataKey="date" stroke="#64748b" fontSize={10} tickLine={false} />
                 <YAxis stroke="#64748b" fontSize={10} tickLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "rgba(15, 23, 42, 0.9)",
-                    borderColor: "rgba(255, 255, 255, 0.1)",
-                    borderRadius: "8px",
-                    fontSize: "12px",
+                    backgroundColor: "#0f2942",
+                    borderColor: "#334155",
+                    borderRadius: "4px",
+                    fontSize: "11px",
+                    color: "#ffffff",
                   }}
                 />
-                <Area type="monotone" dataKey="ping" name="Ping (ms)" stroke="#818cf8" strokeWidth={2} fill="url(#dashPing)" />
+                <Area type="monotone" dataKey="ping" name="Ping (ms)" stroke="#1e3a8a" strokeWidth={2} fill="#1e3a8a" fillOpacity={0.15} />
               </AreaChart>
             </ResponsiveContainer>
           </div>

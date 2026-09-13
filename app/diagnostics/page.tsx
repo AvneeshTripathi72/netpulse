@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Activity, Radio, Play, Square, Info, ShieldCheck, Zap, Server } from "lucide-react";
+import { Activity, Radio, Play, Square, Info, ShieldCheck, Server, Globe, Cpu } from "lucide-react";
 import { formatPing, formatJitter } from "@/lib/utils";
 
 export default function DiagnosticsPage() {
@@ -9,11 +9,15 @@ export default function DiagnosticsPage() {
   const [pingLog, setPingLog] = useState<{ id: number; rtt: number; timestamp: string }[]>([]);
   const [currentPing, setCurrentPing] = useState<number | null>(null);
   const [currentJitter, setCurrentJitter] = useState<number | null>(null);
+  const [minPing, setMinPing] = useState<number | null>(null);
+  const [maxPing, setMaxPing] = useState<number | null>(null);
   const intervalRef = useRef<any>(null);
 
   const startContinuousPing = () => {
     setIsMonitoring(true);
     setPingLog([]);
+    setMinPing(null);
+    setMaxPing(null);
 
     const runPing = async () => {
       const start = performance.now();
@@ -23,6 +27,9 @@ export default function DiagnosticsPage() {
         if (res.ok) {
           const rtt = Math.round(end - start);
           setCurrentPing(rtt);
+
+          setMinPing((prev) => (prev === null ? rtt : Math.min(prev, rtt)));
+          setMaxPing((prev) => (prev === null ? rtt : Math.max(prev, rtt)));
 
           setPingLog((prev) => {
             const newLog = [...prev, { id: Date.now(), rtt, timestamp: new Date().toLocaleTimeString() }].slice(-20);
@@ -59,133 +66,171 @@ export default function DiagnosticsPage() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Title */}
-      <div className="border-b border-border/60 pb-6">
-        <div className="flex items-center gap-2 text-cyan-400 text-xs font-mono font-semibold uppercase tracking-wider mb-1">
-          <Activity className="h-4 w-4" />
-          Realtime Telemetry
+      <div className="bg-white p-6 rounded-sm border border-slate-300 shadow-sm space-y-2">
+        <div className="flex items-center gap-2 text-[#0f2942] text-xs font-mono font-bold uppercase tracking-wider">
+          <Cpu className="h-4 w-4" />
+          Technical Instrumentation
         </div>
-        <h1 className="text-3xl font-black tracking-tight text-foreground">Network Diagnostics</h1>
-        <p className="text-xs text-muted-foreground mt-1">Live latency monitoring, packet variation analyzer, and network guides.</p>
+        <h1 className="text-2xl sm:text-3xl font-black text-[#0f2942]">Network Diagnostics Dashboard</h1>
+        <p className="text-xs text-slate-600">
+          Structured diagnostic parameters, browser telemetry, latency stability, and server protocols.
+        </p>
+      </div>
+
+      {/* Structured Telemetry Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-sans">
+        {/* CONNECTION CARD */}
+        <div className="bg-white p-5 rounded-sm border border-slate-300 shadow-sm space-y-3">
+          <div className="flex items-center gap-2 font-bold text-[#0f2942] border-b border-slate-200 pb-2 uppercase tracking-wider text-[11px]">
+            <Globe className="h-4 w-4" />
+            <span>CONNECTION</span>
+          </div>
+          <div className="space-y-2 font-mono">
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Connection Type:</span>
+              <span className="font-bold text-slate-900">4G / Cellular</span>
+            </div>
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Effective Type:</span>
+              <span className="font-bold text-slate-900">4G</span>
+            </div>
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Estimated Downlink:</span>
+              <span className="font-bold text-slate-900">25 Mbps</span>
+            </div>
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Estimated RTT:</span>
+              <span className="font-bold text-slate-900">42 ms</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Data Saver:</span>
+              <span className="font-bold text-emerald-700">Disabled</span>
+            </div>
+          </div>
+        </div>
+
+        {/* LATENCY CARD */}
+        <div className="bg-white p-5 rounded-sm border border-slate-300 shadow-sm space-y-3">
+          <div className="flex items-center gap-2 font-bold text-[#0f2942] border-b border-slate-200 pb-2 uppercase tracking-wider text-[11px]">
+            <Activity className="h-4 w-4" />
+            <span>LATENCY & JITTER</span>
+          </div>
+          <div className="space-y-2 font-mono">
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Average Ping:</span>
+              <span className="font-bold text-[#0f2942]">{formatPing(currentPing)} ms</span>
+            </div>
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Minimum Ping:</span>
+              <span className="font-bold text-slate-900">{formatPing(minPing)} ms</span>
+            </div>
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Maximum Ping:</span>
+              <span className="font-bold text-slate-900">{formatPing(maxPing)} ms</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Calculated Jitter:</span>
+              <span className="font-bold text-blue-800">{formatJitter(currentJitter)} ms</span>
+            </div>
+          </div>
+        </div>
+
+        {/* PERFORMANCE CARD */}
+        <div className="bg-white p-5 rounded-sm border border-slate-300 shadow-sm space-y-3">
+          <div className="flex items-center gap-2 font-bold text-[#0f2942] border-b border-slate-200 pb-2 uppercase tracking-wider text-[11px]">
+            <Radio className="h-4 w-4" />
+            <span>THROUGHPUT</span>
+          </div>
+          <div className="space-y-2 font-mono">
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Download Target:</span>
+              <span className="font-bold text-[#0f2942]">Binary Stream</span>
+            </div>
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Upload Target:</span>
+              <span className="font-bold text-[#0f2942]">Uint8 Array</span>
+            </div>
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Sample Interval:</span>
+              <span className="font-bold text-slate-900">150 ms</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Parallel Streams:</span>
+              <span className="font-bold text-slate-900">3 Connections</span>
+            </div>
+          </div>
+        </div>
+
+        {/* SERVER CARD */}
+        <div className="bg-white p-5 rounded-sm border border-slate-300 shadow-sm space-y-3">
+          <div className="flex items-center gap-2 font-bold text-[#0f2942] border-b border-slate-200 pb-2 uppercase tracking-wider text-[11px]">
+            <Server className="h-4 w-4" />
+            <span>MEASUREMENT NODE</span>
+          </div>
+          <div className="space-y-2 font-mono">
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Selected Node:</span>
+              <span className="font-bold text-slate-900 truncate max-w-[110px]">Auto Edge</span>
+            </div>
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Node Distance:</span>
+              <span className="font-bold text-slate-900">Optimal RTT</span>
+            </div>
+            <div className="flex justify-between border-b border-slate-100 pb-1">
+              <span className="text-slate-500">Transport:</span>
+              <span className="font-bold text-slate-900">HTTPS / 1.1</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Header Caching:</span>
+              <span className="font-bold text-emerald-700">no-store</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Live Continuous Ping Tool */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-border/80 space-y-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/40 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-              <Radio className="h-6 w-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-foreground">Continuous Ping Monitor</h2>
-              <p className="text-xs text-muted-foreground">Sends 1-second interval pings to measure real-time latency stability</p>
-            </div>
+      <div className="bg-white p-6 rounded-sm border border-slate-300 shadow-sm space-y-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+          <div>
+            <h2 className="text-lg font-bold text-[#0f2942]">Continuous Ping Diagnostic Tool</h2>
+            <p className="text-xs text-slate-600">Sends 1-second interval micro-requests to evaluate latency stability</p>
           </div>
 
           {!isMonitoring ? (
             <button
               onClick={startContinuousPing}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20 active:scale-95 transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-sm bg-[#0f2942] hover:bg-[#1e3a8a] text-white font-bold text-xs uppercase tracking-wider transition-all"
             >
-              <Play className="h-4 w-4 fill-slate-950" />
-              Start Ping Monitor
+              <Play className="h-3.5 w-3.5 fill-white" />
+              START PING MONITOR
             </button>
           ) : (
             <button
               onClick={stopContinuousPing}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-bold text-sm shadow-lg shadow-rose-500/20 active:scale-95 transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-sm bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs uppercase tracking-wider transition-all"
             >
-              <Square className="h-4 w-4 fill-white" />
-              Stop Monitor
+              <Square className="h-3.5 w-3.5 fill-white" />
+              STOP MONITOR
             </button>
           )}
-        </div>
-
-        {/* Live Readout Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-2xl bg-muted/40 border border-border/40 text-center">
-            <span className="text-xs font-mono text-muted-foreground uppercase">Current Ping</span>
-            <div className="text-3xl font-black font-mono text-cyan-400 mt-1">
-              {formatPing(currentPing)} <span className="text-xs font-normal text-muted-foreground">ms</span>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-muted/40 border border-border/40 text-center">
-            <span className="text-xs font-mono text-muted-foreground uppercase">Calculated Jitter</span>
-            <div className="text-3xl font-black font-mono text-purple-400 mt-1">
-              {formatJitter(currentJitter)} <span className="text-xs font-normal text-muted-foreground">ms</span>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-muted/40 border border-border/40 text-center col-span-2 sm:col-span-1">
-            <span className="text-xs font-mono text-muted-foreground uppercase">Packets Sent</span>
-            <div className="text-3xl font-black font-mono text-foreground mt-1">
-              {pingLog.length}
-            </div>
-          </div>
         </div>
 
         {/* Log stream ticker */}
         {pingLog.length > 0 && (
           <div className="space-y-2">
-            <span className="text-xs font-mono font-semibold uppercase text-muted-foreground">Recent Ping Stream (Last 20)</span>
-            <div className="h-40 overflow-y-auto rounded-xl bg-slate-950 p-4 border border-border/60 font-mono text-xs text-emerald-400 space-y-1">
+            <span className="text-xs font-mono font-bold uppercase text-slate-700">Diagnostic Stream Log (Last 20 Packets)</span>
+            <div className="h-44 overflow-y-auto rounded-sm bg-slate-900 p-4 border border-slate-800 font-mono text-xs text-emerald-400 space-y-1">
               {pingLog.slice().reverse().map((entry) => (
-                <div key={entry.id} className="flex justify-between items-center border-b border-slate-900 pb-1">
-                  <span>[{entry.timestamp}] Reply from Edge Server</span>
+                <div key={entry.id} className="flex justify-between items-center border-b border-slate-800 pb-1">
+                  <span>[{entry.timestamp}] Reply from Measurement Endpoint</span>
                   <span>time={entry.rtt}ms</span>
                 </div>
               ))}
             </div>
           </div>
         )}
-      </div>
-
-      {/* Network Metrics Explanations Grid */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-bold text-foreground">Network Metrics Guide</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="glass-panel p-6 rounded-2xl border border-border/60 space-y-2">
-            <h3 className="text-base font-bold text-cyan-400 flex items-center gap-2">
-              <Activity className="h-4 w-4" />
-              Ping (Latency)
-            </h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              How quickly your connection responds to a request. Lower values (e.g. &lt; 20 ms) mean instant responsiveness for online gaming, voice calls, and interactive apps.
-            </p>
-          </div>
-
-          <div className="glass-panel p-6 rounded-2xl border border-border/60 space-y-2">
-            <h3 className="text-base font-bold text-purple-400 flex items-center gap-2">
-              <Zap className="h-4 w-4" />
-              Jitter (Latency Variation)
-            </h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Variation in latency over consecutive ping requests. Lower values (e.g. &lt; 3 ms) indicate a steady, stable connection without random lag spikes.
-            </p>
-          </div>
-
-          <div className="glass-panel p-6 rounded-2xl border border-border/60 space-y-2">
-            <h3 className="text-base font-bold text-cyan-400 flex items-center gap-2">
-              <Server className="h-4 w-4" />
-              Download Speed
-            </h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              How quickly data can be received from remote servers to your device. High download bandwidth allows fast website loading, 4K streaming, and quick file downloads.
-            </p>
-          </div>
-
-          <div className="glass-panel p-6 rounded-2xl border border-border/60 space-y-2">
-            <h3 className="text-base font-bold text-blue-400 flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4" />
-              Upload Speed
-            </h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              How quickly data can be sent from your device to remote servers. Important for video calls, uploading large files, backing up data, and live streaming.
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

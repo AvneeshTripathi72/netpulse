@@ -1,58 +1,63 @@
 import Link from "next/link";
-import { Activity, Globe, Shield, FileText } from "lucide-react";
+import { Activity, ShieldAlert } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-slate-300 bg-[#0b2545] text-slate-300 py-10 text-xs">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="border-t border-slate-300 bg-[#0f2942] text-slate-300 py-10 text-xs mt-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Brand Col */}
-          <div className="space-y-2 md:col-span-1">
+          <div className="space-y-3 md:col-span-1">
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded bg-white text-[#0b2545] font-bold">
+              <div className="flex h-7 w-7 items-center justify-center rounded-sm bg-white text-[#0f2942] font-black">
                 <Activity className="h-4 w-4" />
               </div>
               <span className="text-base font-bold text-white uppercase tracking-tight">NetPulse</span>
             </Link>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              National Broadband Speed Measurement Portal. High-precision browser-based speed test utility.
+              Public Broadband Measurement Portal — Independent Network Telemetry & Diagnostic System.
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Service Column */}
           <div className="space-y-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Portal Services</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Service</h4>
             <ul className="space-y-1.5 text-[11px]">
               <li>
                 <Link href="/" className="hover:text-cyan-300 transition-colors">
-                  Speed Test Utility
-                </Link>
-              </li>
-              <li>
-                <Link href="/history" className="hover:text-cyan-300 transition-colors">
-                  Test Execution Logs
-                </Link>
-              </li>
-              <li>
-                <Link href="/dashboard" className="hover:text-cyan-300 transition-colors">
-                  Analytics Dashboard
+                  Speed Test
                 </Link>
               </li>
               <li>
                 <Link href="/diagnostics" className="hover:text-cyan-300 transition-colors">
-                  Network Diagnostics
+                  Diagnostics
+                </Link>
+              </li>
+              <li>
+                <Link href="/history" className="hover:text-cyan-300 transition-colors">
+                  Test History
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard" className="hover:text-cyan-300 transition-colors">
+                  Dashboard
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Information Links */}
+          {/* Information Column */}
           <div className="space-y-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-white">Information</h4>
             <ul className="space-y-1.5 text-[11px]">
               <li>
+                <Link href="/methodology" className="hover:text-cyan-300 transition-colors">
+                  Methodology
+                </Link>
+              </li>
+              <li>
                 <Link href="/about" className="hover:text-cyan-300 transition-colors">
-                  About Portal
+                  About NetPulse
                 </Link>
               </li>
               <li>
@@ -68,22 +73,42 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Status */}
+          {/* System Column */}
           <div className="space-y-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Engine Specifications</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">System</h4>
+            <ul className="space-y-1.5 text-[11px]">
+              <li>
+                <Link href="/status" className="hover:text-cyan-300 transition-colors">
+                  Service Status
+                </Link>
+              </li>
+              <li>
+                <span className="text-slate-400">Measurement Nodes: 5 Active</span>
+              </li>
+              <li>
+                <span className="text-slate-400">Protocol: HTTPS Binary Stream</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact & Disclaimer Column */}
+          <div className="space-y-2">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Contact & Notes</h4>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Multi-connection binary byte transfer measurement with round-trip latency variance calculation.
+              For technical queries or feedback, use our feedback portal.
             </p>
-            <div className="flex items-center gap-2 pt-1 text-[11px] text-emerald-400 font-mono">
-              <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Portal Operational
-            </div>
           </div>
         </div>
 
-        <div className="mt-8 border-t border-slate-800 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
-          <p>© {new Date().getFullYear()} NetPulse Broadband Portal. All rights reserved.</p>
-          <span>Broadband Measurement Utility</span>
+        {/* Legal Disclaimer Box */}
+        <div className="p-3 rounded-sm bg-slate-900 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
+          <strong className="text-slate-200">Disclaimer:</strong> NetPulse is an independent broadband measurement service and is not affiliated with or operated by any government agency.
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="border-t border-slate-800 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
+          <p>© 2026 NetPulse. Independent Network Measurement Service.</p>
+          <p>Controlled Laboratory & Browser-Based Benchmark</p>
         </div>
       </div>
     </footer>

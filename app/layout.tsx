@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { TopStatusBar } from "@/components/layout/top-status-bar";
 import { Navbar } from "@/components/layout/navbar";
+import { Breadcrumb } from "@/components/layout/breadcrumb";
 import { Footer } from "@/components/layout/footer";
 import { FeedbackWidget } from "@/components/feedback-widget";
 
@@ -12,13 +14,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "NetPulse — Free Internet Speed Test & Network Diagnostics",
-  description: "Test your internet download speed, upload speed, ping, jitter, and connection quality with NetPulse precision network test.",
-  keywords: ["speed test", "internet speed test", "bandwidth test", "ping test", "latency monitor", "jitter", "network diagnostics"],
+  title: "NetPulse — Public Broadband Measurement Portal",
+  description: "Official independent internet broadband measurement utility for download speed, upload speed, latency, and jitter.",
+  keywords: ["broadband measurement", "speed test", "network diagnostics", "ping", "latency", "jitter", "bandwidth measurement"],
   authors: [{ name: "NetPulse" }],
   openGraph: {
-    title: "NetPulse — Free Internet Speed Test",
-    description: "Measure your download speed, upload speed, ping, jitter, and connection quality.",
+    title: "NetPulse — Public Broadband Measurement Portal",
+    description: "Measure your download speed, upload speed, latency, and jitter with an independent broadband measurement utility.",
     type: "website",
   },
 };
@@ -37,7 +39,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <TopStatusBar />
           <Navbar />
+          <Breadcrumb />
           <main className="flex-1">{children}</main>
           <Footer />
           <FeedbackWidget />

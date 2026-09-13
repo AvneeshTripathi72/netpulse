@@ -1,47 +1,48 @@
-import { HelpCircle, Info, ShieldCheck, Zap } from "lucide-react";
+import { Info, ShieldCheck, Activity, Globe } from "lucide-react";
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
       {/* Title */}
-      <div className="border-b border-border/60 pb-6 text-center space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-semibold uppercase">
-          <HelpCircle className="h-3.5 w-3.5" />
-          About NetPulse
+      <div className="bg-white p-6 rounded-sm border border-slate-300 shadow-sm space-y-2">
+        <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase text-[#0f2942]">
+          <Info className="h-4 w-4" />
+          Institutional Profile
         </div>
-        <h1 className="text-4xl font-black text-foreground">Know Your Connection</h1>
-        <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-          NetPulse is a modern, high-precision browser-based internet speed test and network telemetry suite.
+        <h1 className="text-2xl sm:text-3xl font-black text-[#0f2942]">About NetPulse</h1>
+        <p className="text-xs text-slate-600">
+          Independent Public Broadband Measurement Portal for network performance diagnostics.
         </p>
       </div>
 
-      {/* Main Content Sections */}
-      <div className="glass-panel p-8 rounded-3xl border border-border/80 space-y-6 text-sm leading-relaxed text-muted-foreground">
-        <div className="space-y-3">
-          <h2 className="text-xl font-bold text-foreground">How NetPulse Works</h2>
+      {/* Main Document Body */}
+      <div className="bg-white p-6 sm:p-8 rounded-sm border border-slate-300 shadow-sm space-y-6 text-xs text-slate-700 leading-relaxed">
+        <section className="space-y-2">
+          <h2 className="text-base font-bold text-[#0f2942] border-b border-slate-200 pb-2">
+            1. Mission & Purpose
+          </h2>
           <p>
-            When you initiate a speed test on NetPulse, our browser engine executes multi-stage network benchmarks directly in your web browser:
+            NetPulse is an independent, browser-based broadband measurement platform designed to provide transparent, accurate, and accessible network throughput metrics to users, researchers, and network administrators.
           </p>
-          <ul className="list-disc list-inside space-y-1.5 pl-2 font-mono text-xs text-foreground">
-            <li><strong className="text-cyan-400">Latency & Jitter:</strong> Measures round-trip micro-requests to establish ping speed and packet timing consistency.</li>
-            <li><strong className="text-cyan-400">Download Throughput:</strong> Fetches binary streams across parallel HTTP connections to measure real-time byte reception.</li>
-            <li><strong className="text-cyan-400">Upload Throughput:</strong> Sends byte payloads using progress events to measure outbound transmission speed.</li>
-          </ul>
-        </div>
+        </section>
 
-        <div className="space-y-3 border-t border-border/40 pt-6">
-          <h2 className="text-xl font-bold text-foreground">Factors Impacting Test Speed</h2>
+        <section className="space-y-2">
+          <h2 className="text-base font-bold text-[#0f2942] border-b border-slate-200 pb-2">
+            2. Infrastructure & Measurement Architecture
+          </h2>
           <p>
-            Speed results can vary depending on Wi-Fi signal strength, device CPU performance, browser tab overhead, edge server proximity, network congestion, and ISP throttle policies.
+            Our test infrastructure relies on controlled HTTPS measurement endpoints across edge network nodes. By testing round-trip latency, binary stream download capacity, and byte array upload throughput, NetPulse calculates reliable network benchmarks without synthetic artificial inflation.
           </p>
-        </div>
+        </section>
 
-        <div className="space-y-3 border-t border-border/40 pt-6">
-          <h2 className="text-xl font-bold text-foreground">Transparency & Accuracy Disclaimer</h2>
-          <p className="p-4 rounded-2xl bg-muted/40 border border-border/40 text-xs font-mono">
-            "NetPulse provides browser-level network measurements. While built with multi-sample stream analysis to maximize accuracy, browser measurements may differ slightly from raw hardware ISP-level speed tests."
+        <section className="space-y-2">
+          <h2 className="text-base font-bold text-[#0f2942] border-b border-slate-200 pb-2">
+            3. Transparency & Non-Affiliation Notice
+          </h2>
+          <p className="p-3 bg-slate-50 border border-slate-300 rounded-sm font-mono text-[11px] text-slate-700">
+            NetPulse is an independent broadband measurement utility. It is not an official government agency and is not affiliated with or operated by any regulatory government authority.
           </p>
-        </div>
+        </section>
       </div>
     </div>
   );
