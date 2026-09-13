@@ -1,26 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { MessageSquare, X, Send, CheckCircle2, AlertCircle } from "lucide-react";
 
 export function FeedbackWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Auto-open 1 second after user lands on website (if not previously dismissed in session)
-  useEffect(() => {
-    const hasSeenAutoPopup = sessionStorage.getItem("netpulse_feedback_auto_shown");
-    if (!hasSeenAutoPopup) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-        sessionStorage.setItem("netpulse_feedback_auto_shown", "true");
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
