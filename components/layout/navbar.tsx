@@ -21,25 +21,25 @@ export function Navbar() {
   ];
 
   return (
-    <header className="w-full bg-[#0f2942] text-white border-b border-slate-700 shadow-md">
+    <header className="w-full bg-white text-slate-900 border-b border-slate-300 shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-white text-[#0f2942] font-black shadow-sm border border-slate-300">
-            <Activity className="h-6 w-6 stroke-[2.5]" />
+        {/* Simple Enterprise Logo */}
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#0f2942] text-white font-black shadow-sm">
+            <Activity className="h-5 w-5 stroke-[2.5]" />
           </div>
           <div className="flex flex-col">
-            <span className="text-xl font-black tracking-tight text-white uppercase font-sans">
+            <span className="text-lg font-bold tracking-tight text-[#0f2942] uppercase font-sans">
               NetPulse
             </span>
-            <span className="text-[9px] tracking-widest text-slate-300 uppercase font-semibold">
-              Public Broadband Measurement Portal
+            <span className="text-[10px] tracking-wider text-slate-500 font-semibold uppercase">
+              Broadband Portal
             </span>
           </div>
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-0.5">
+        {/* Traditional Clean Navigation Links */}
+        <nav className="hidden lg:flex items-center gap-6">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -47,10 +47,10 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "px-3 py-2 rounded-sm text-xs font-semibold uppercase tracking-wider transition-all",
+                  "py-1 text-xs font-semibold uppercase tracking-wider transition-colors",
                   isActive
-                    ? "bg-[#1e3a8a] text-cyan-300 border-b-2 border-cyan-400 font-bold"
-                    : "text-slate-200 hover:text-white hover:bg-[#1e3a8a]/50"
+                    ? "text-[#0f2942] font-bold border-b-2 border-[#0f2942]"
+                    : "text-slate-700 hover:text-[#0f2942] hover:underline"
                 )}
               >
                 {link.name}
@@ -59,19 +59,19 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* Right Action */}
+        {/* Simple Action Button */}
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-sm bg-[#1e3a8a] hover:bg-blue-800 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm border border-blue-700"
+            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-sm bg-[#0f2942] hover:bg-[#1e3a8a] text-white font-bold text-xs uppercase tracking-wider transition-colors"
           >
             <Zap className="h-3.5 w-3.5 fill-white" />
-            START TEST
+            Start Speed Test
           </Link>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden flex h-9 w-9 items-center justify-center rounded-sm border border-slate-600 text-white"
+            className="lg:hidden flex h-9 w-9 items-center justify-center rounded-sm border border-slate-300 text-slate-700 hover:bg-slate-100"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -81,7 +81,7 @@ export function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-700 bg-[#0f2942] px-4 pt-2 pb-4 space-y-1">
+        <div className="lg:hidden border-t border-slate-200 bg-slate-50 px-4 pt-2 pb-4 space-y-1">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -90,10 +90,10 @@ export function Navbar() {
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={cn(
-                  "block px-4 py-2.5 rounded-sm text-xs font-semibold uppercase transition-colors",
+                  "block px-3 py-2 text-xs font-semibold uppercase transition-colors rounded-sm",
                   isActive
-                    ? "bg-[#1e3a8a] text-cyan-300 font-bold"
-                    : "text-slate-200 hover:bg-[#1e3a8a]/50"
+                    ? "bg-[#0f2942] text-white font-bold"
+                    : "text-slate-700 hover:bg-slate-200"
                 )}
               >
                 {link.name}

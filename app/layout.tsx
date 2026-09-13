@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { TopStatusBar } from "@/components/layout/top-status-bar";
 import { Navbar } from "@/components/layout/navbar";
 import { Breadcrumb } from "@/components/layout/breadcrumb";
 import { Footer } from "@/components/layout/footer";
@@ -39,7 +38,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TopStatusBar />
           <Navbar />
           <Breadcrumb />
           <main className="flex-1">{children}</main>
