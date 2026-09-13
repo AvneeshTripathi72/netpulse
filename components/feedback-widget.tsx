@@ -1,13 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { MessageSquare, X, Star, Send, CheckCircle2, AlertCircle, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { MessageSquare, X, Send, CheckCircle2, AlertCircle, Sparkles } from "lucide-react";
 
 export function FeedbackWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [rating, setRating] = useState(5);
-  const [hoverRating, setHoverRating] = useState(0);
-  const [category, setCategory] = useState("General");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -15,7 +12,17 @@ export function FeedbackWidget() {
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const categories = ["General", "Bug Report", "Speed Accuracy", "Feature Request"];
+  // Auto-open 1 second after user lands on website (if not previously dismissed in this session)
+  useEffect(() => {
+    const hasSeenAutoPopup = sessionStorage.getItem("netpulse_feedback_auto_shown");
+    if (!hasSeenAutoPopup) {
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+        sessionStorage.setItem("netpulse_feedback_auto_shown", "true");
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,8 +41,8 @@ export function FeedbackWidget() {
         body: JSON.stringify({
           name: name.trim() || undefined,
           email: email.trim() || undefined,
-          rating,
-          category,
+          rating: 5,
+          category: "General",
           message: message.trim(),
         }),
       });
@@ -57,8 +64,12 @@ export function FeedbackWidget() {
   const handleReset = () => {
     setSubmitted(false);
     setErrorMsg(null);
-    setRating(5);
     setMessage("");
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    sessionStorage.setItem("netpulse_feedback_auto_shown", "true");
   };
 
   return (
@@ -73,13 +84,13 @@ export function FeedbackWidget() {
                 <Sparkles className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Send Us Feedback</h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Help us improve NetPulse</p>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Feedback</h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Write your feedback or message</p>
               </div>
             </div>
 
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={handleClose}
               className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
               aria-label="Close feedback form"
             >
@@ -95,18 +106,18 @@ export function FeedbackWidget() {
               </div>
               <h4 className="text-base font-bold text-slate-900 dark:text-white">Thank You!</h4>
               <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed px-4">
-                Your feedback has been received and emailed to our performance team.
+                Your feedback message has been sent successfully.
               </p>
               <button
                 onClick={handleReset}
                 className="mt-2 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-all shadow-md shadow-cyan-600/20"
               >
-                Send Another Note
+                Send Another Message
               </button>
             </div>
           ) : (
-            /* Form Body */
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+            /* Clean Form Body: Message + Optional Name/Email */
+            <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
               {errorMsg && (
                 <div className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-600 dark:text-rose-400 text-[11px] flex items-center gap-2">
                   <AlertCircle className="h-4 w-4 flex-shrink-0" />
@@ -114,70 +125,17 @@ export function FeedbackWidget() {
                 </div>
               )}
 
-              {/* Star Rating Picker */}
-              <div className="space-y-1">
-                <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Experience Rating
-                </label>
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setRating(star)}
-                      onMouseEnter={() => setHoverRating(star)}
-                      onMouseLeave={() => setHoverRating(0)}
-                      className="p-1 transition-transform hover:scale-110"
-                    >
-                      <Star
-                        className={`h-5 w-5 ${
-                          (hoverRating || rating) >= star
-                            ? "fill-amber-400 text-amber-400"
-                            : "text-slate-300 dark:text-slate-700"
-                        }`}
-                      />
-                    </button>
-                  ))}
-                  <span className="ml-2 font-mono text-[11px] text-slate-500 dark:text-slate-400">
-                    {rating}/5
-                  </span>
-                </div>
-              </div>
-
-              {/* Category Pills */}
-              <div className="space-y-1">
-                <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Topic
-                </label>
-                <div className="flex flex-wrap gap-1.5">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat}
-                      type="button"
-                      onClick={() => setCategory(cat)}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
-                        category === cat
-                          ? "bg-cyan-50 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/40 font-bold"
-                          : "bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:text-slate-900 dark:hover:text-white"
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Feedback Textarea */}
+              {/* Feedback Message Textarea */}
               <div className="space-y-1">
                 <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Your Message <span className="text-rose-500">*</span>
                 </label>
                 <textarea
                   required
-                  rows={3}
+                  rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Tell us what you liked or how we can improve..."
+                  placeholder="Type your message or feedback here..."
                   className="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-cyan-500 resize-none"
                 />
               </div>
