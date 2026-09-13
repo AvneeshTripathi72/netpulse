@@ -10,7 +10,6 @@ export function FeedbackWidget() {
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim()) {
@@ -54,103 +53,117 @@ export function FeedbackWidget() {
 
   const handleClose = () => {
     setIsOpen(false);
-    sessionStorage.setItem("netpulse_feedback_auto_shown", "true");
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-      {/* Compact Dialog Box */}
+    <>
+      {/* Centered Modal Window Popup */}
       {isOpen && (
-        <div className="mb-3 w-72 sm:w-80 bg-white rounded-md border border-slate-300 shadow-xl overflow-hidden text-slate-900 animate-fade-in">
-          {/* Navy Enterprise Header */}
-          <div className="bg-[#0b2545] text-white px-4 py-2.5 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <MessageSquare className="h-4 w-4 text-cyan-400" />
-              <h3 className="text-xs font-bold uppercase tracking-wider">Feedback</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-white rounded-lg border border-slate-300 shadow-2xl overflow-hidden text-slate-900">
+            {/* Header Strip */}
+            <div className="bg-[#0f2942] text-white px-6 py-4 flex items-center justify-between border-b border-slate-700">
+              <div className="flex items-center gap-2.5">
+                <MessageSquare className="h-5 w-5 text-cyan-400" />
+                <h3 className="text-sm font-bold uppercase tracking-wider">User Feedback</h3>
+              </div>
+
+              <button
+                onClick={handleClose}
+                className="p-1.5 rounded-md hover:bg-slate-700/60 text-slate-300 hover:text-white transition-colors"
+                aria-label="Close modal window"
+              >
+                <X className="h-5 w-5" />
+              </button>
             </div>
 
-            <button
-              onClick={handleClose}
-              className="p-1 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"
-              aria-label="Close dialog"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-
-          <div className="p-4">
-            {submitted ? (
-              /* Success State */
-              <div className="py-3 text-center space-y-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 mx-auto">
-                  <CheckCircle2 className="h-5 w-5" />
-                </div>
-                <h4 className="text-xs font-bold text-[#0b2545]">Feedback Sent!</h4>
-                <p className="text-[11px] text-slate-600 leading-relaxed">
-                  Thank you for your feedback.
-                </p>
-                <button
-                  onClick={handleReset}
-                  className="mt-1 px-3 py-1.5 rounded-md bg-[#0b2545] hover:bg-[#133c6d] text-white text-[11px] font-bold"
-                >
-                  Send Another
-                </button>
-              </div>
-            ) : (
-              /* Clean Form Body: Message Only */
-              <form onSubmit={handleSubmit} className="space-y-2.5 text-xs">
-                {errorMsg && (
-                  <div className="p-2 rounded bg-rose-50 border border-rose-200 text-rose-700 text-[11px] flex items-center gap-1.5">
-                    <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
-                    <span>{errorMsg}</span>
+            {/* Modal Body */}
+            <div className="p-6 space-y-4">
+              {submitted ? (
+                /* Success State */
+                <div className="py-6 text-center space-y-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 mx-auto">
+                    <CheckCircle2 className="h-6 w-6" />
                   </div>
-                )}
-
-                {/* Short Compact Textarea */}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-700">
-                    Your Feedback / Message <span className="text-rose-600">*</span>
-                  </label>
-                  <textarea
-                    required
-                    rows={2.5}
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Type message here..."
-                    className="w-full rounded-md bg-slate-50 border border-slate-300 p-2 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0b2545] resize-none h-16"
-                  />
+                  <h4 className="text-base font-bold text-[#0f2942]">Thank You for Your Feedback!</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed max-w-xs mx-auto">
+                    Your feedback has been successfully recorded and sent to our team.
+                  </p>
+                  <button
+                    onClick={handleReset}
+                    className="mt-2 px-4 py-2 rounded-md bg-[#0f2942] hover:bg-[#163a5c] text-white text-xs font-bold uppercase tracking-wider"
+                  >
+                    Send Another Response
+                  </button>
                 </div>
-
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full flex items-center justify-center gap-1.5 py-2 rounded-md bg-[#0b2545] hover:bg-[#133c6d] text-white font-bold text-xs uppercase tracking-wider shadow-sm disabled:opacity-50"
-                >
-                  {loading ? (
-                    "Sending..."
-                  ) : (
-                    <>
-                      <Send className="h-3.5 w-3.5" />
-                      Submit
-                    </>
+              ) : (
+                /* Clean Form Body */
+                <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+                  {errorMsg && (
+                    <div className="p-3 rounded-md bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                      <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                      <span>{errorMsg}</span>
+                    </div>
                   )}
-                </button>
-              </form>
-            )}
+
+                  {/* Feedback Message Input */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-800 uppercase tracking-wider flex justify-between">
+                      <span>Your Feedback / Message</span>
+                      <span className="text-rose-600">*</span>
+                    </label>
+                    <textarea
+                      required
+                      rows={4}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Share your thoughts, suggestions, or issues..."
+                      className="w-full rounded-md bg-slate-50 border border-slate-300 p-3 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0f2942] focus:border-transparent resize-none leading-relaxed"
+                    />
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center justify-end gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleClose}
+                      className="px-4 py-2.5 rounded-md border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-slate-100 transition-colors"
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-md bg-[#0f2942] hover:bg-[#163a5c] text-white font-bold text-xs uppercase tracking-wider shadow-sm disabled:opacity-50 transition-colors"
+                    >
+                      {loading ? (
+                        "Submitting..."
+                      ) : (
+                        <>
+                          <Send className="h-3.5 w-3.5" />
+                          Submit Feedback
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       )}
 
-      {/* Floating Trigger Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-[#0b2545] hover:bg-[#133c6d] text-white font-bold text-xs uppercase tracking-wider shadow-md border border-slate-600 transition-all"
-        aria-label="Toggle feedback dialog"
-      >
-        <MessageSquare className="h-4 w-4 text-cyan-400" />
-        <span>Feedback</span>
-      </button>
-    </div>
+      {/* Floating Button at Bottom Right (visible when modal is closed) */}
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 rounded-md bg-[#0f2942] hover:bg-[#163a5c] text-white font-bold text-xs uppercase tracking-wider shadow-lg border border-slate-600 transition-all hover:scale-105"
+          aria-label="Open feedback dialog"
+        >
+          <MessageSquare className="h-4 w-4 text-cyan-400" />
+          <span>Feedback</span>
+        </button>
+      )}
+    </>
   );
 }
