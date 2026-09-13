@@ -40,48 +40,33 @@ export function SpeedGauge({
   const stageLabel = useMemo(() => {
     switch (stage) {
       case "finding_server":
-        return "CONNECTING TO EDGE SERVER...";
+        return "CONNECTING TO TEST SERVER...";
       case "latency":
         return "MEASURING LATENCY & JITTER...";
       case "download":
-        return "TESTING DOWNLOAD SPEED...";
+        return "TESTING DOWNLOAD THROUGHPUT...";
       case "upload":
-        return "TESTING UPLOAD SPEED...";
+        return "TESTING UPLOAD THROUGHPUT...";
       case "finalizing":
         return "FINALIZING METRICS...";
       case "done":
-        return "TEST COMPLETE";
+        return "MEASUREMENT COMPLETE";
       default:
-        return "READY TO TEST";
+        return "READY TO START TEST";
     }
   }, [stage]);
 
   return (
     <div className="relative flex flex-col items-center justify-center py-4">
-      {/* Backlight Ambient Glow */}
-      <div
-        className={`absolute h-72 w-72 rounded-full blur-3xl transition-opacity duration-700 pointer-events-none ${
-          status === "testing_download" || status === "testing_upload"
-            ? "bg-cyan-500/15 opacity-100"
-            : status === "testing_latency"
-            ? "bg-indigo-500/15 opacity-80"
-            : "bg-cyan-500/5 opacity-30"
-        }`}
-      />
-
       {/* SVG Gauge Container */}
       <div className="relative h-72 w-72 sm:h-80 sm:w-80 flex items-center justify-center">
         <svg className="h-full w-full transform -rotate-90" viewBox="0 0 300 300">
           <defs>
             <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#0891b2" />
-              <stop offset="50%" stopColor="#0284c7" />
-              <stop offset="100%" stopColor="#10b981" />
+              <stop offset="0%" stopColor="#0b2545" />
+              <stop offset="50%" stopColor="#1e40af" />
+              <stop offset="100%" stopColor="#0284c7" />
             </linearGradient>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
           </defs>
 
           {/* Background Arc Track */}
@@ -91,7 +76,7 @@ export function SpeedGauge({
             r={radius}
             fill="none"
             stroke="currentColor"
-            className="text-slate-200 dark:text-slate-800"
+            className="text-slate-200"
             strokeWidth={strokeWidth}
             strokeDasharray={`${arcLength} ${circumference}`}
             strokeLinecap="round"
@@ -111,7 +96,6 @@ export function SpeedGauge({
             strokeLinecap="round"
             transform="rotate(150 150 150)"
             className="transition-all duration-300 ease-out"
-            filter="url(#glow)"
           />
 
           {/* Ticks around the arc */}
@@ -132,7 +116,7 @@ export function SpeedGauge({
                 x2={x2}
                 y2={y2}
                 stroke="currentColor"
-                className="text-slate-300 dark:text-slate-700"
+                className="text-slate-400"
                 strokeWidth="2"
                 transform="rotate(90 150 150)"
               />
@@ -143,19 +127,18 @@ export function SpeedGauge({
         {/* Center Content Overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
           {status === "idle" ? (
-            /* GO Interactive Button */
+            /* Solid Navy GO Button */
             <button
               onClick={onStart}
-              className="group relative flex h-36 w-36 items-center justify-center rounded-full bg-cyan-600 hover:bg-cyan-500 text-white font-black text-4xl tracking-wider shadow-xl shadow-cyan-600/30 border-4 border-white dark:border-slate-800 hover:scale-105 active:scale-95 transition-all duration-200"
+              className="group relative flex h-36 w-36 items-center justify-center rounded-full bg-[#0b2545] hover:bg-[#133c6d] text-white font-black text-4xl tracking-wider shadow-md border-4 border-slate-200 hover:scale-105 active:scale-95 transition-all duration-150"
               aria-label="Start speed test"
             >
-              <span className="relative z-10 drop-shadow-sm">GO</span>
-              <span className="absolute inset-0 rounded-full bg-cyan-400/30 animate-ping opacity-75 group-hover:opacity-100" />
+              <span className="relative z-10">GO</span>
             </button>
           ) : (
             /* Live Dynamic Readout */
             <div className="flex flex-col items-center justify-center">
-              <div className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400 mb-1">
+              <div className="text-xs font-mono font-bold uppercase tracking-widest text-[#0b2545] mb-1">
                 {stage === "download"
                   ? "Download"
                   : stage === "upload"
@@ -164,10 +147,10 @@ export function SpeedGauge({
                   ? "Ping / Jitter"
                   : "Testing"}
               </div>
-              <div className="text-5xl sm:text-6xl font-black tracking-tight text-slate-900 dark:text-white font-mono">
+              <div className="text-5xl sm:text-6xl font-black tracking-tight text-[#0b2545] font-mono">
                 {value}
               </div>
-              <div className="text-sm font-bold text-slate-500 dark:text-slate-400 tracking-wider uppercase mt-0.5">
+              <div className="text-xs font-bold text-slate-500 tracking-wider uppercase mt-0.5">
                 {unit}
               </div>
 
@@ -175,9 +158,9 @@ export function SpeedGauge({
               {status !== "completed" && status !== "error" && (
                 <button
                   onClick={onCancel}
-                  className="mt-4 px-3 py-1 text-xs font-semibold rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-rose-500/10 hover:text-rose-600 text-slate-600 dark:text-slate-400 transition-colors border border-slate-200 dark:border-slate-700"
+                  className="mt-3 px-3 py-1 text-xs font-semibold rounded-md bg-slate-100 hover:bg-rose-50 hover:text-rose-700 text-slate-600 border border-slate-300 transition-colors"
                 >
-                  Cancel
+                  Cancel Test
                 </button>
               )}
             </div>
@@ -186,9 +169,9 @@ export function SpeedGauge({
       </div>
 
       {/* Stage Status Text */}
-      <div className="mt-4 flex items-center gap-2 text-xs font-mono tracking-wider font-semibold text-slate-500 dark:text-slate-400">
+      <div className="mt-4 flex items-center gap-2 text-xs font-mono tracking-wider font-bold text-slate-700">
         {status !== "idle" && status !== "completed" && (
-          <span className="inline-block h-2 w-2 rounded-full bg-cyan-500 animate-ping" />
+          <span className="inline-block h-2 w-2 rounded-full bg-[#0b2545] animate-ping" />
         )}
         {stageLabel}
       </div>
