@@ -65,22 +65,22 @@ export function FeedbackWidget() {
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
       {/* Floating Right-Side Popup Modal Box */}
       {isOpen && (
-        <div className="mb-4 w-80 sm:w-96 glass-panel rounded-3xl border border-border/80 shadow-2xl p-5 animate-fade-in text-foreground relative backdrop-blur-xl">
+        <div className="mb-4 w-80 sm:w-96 glass-panel rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-5 animate-fade-in text-slate-900 dark:text-white relative backdrop-blur-xl">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border/50 pb-3 mb-4">
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
             <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              <div className="p-1.5 rounded-xl bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/20">
                 <Sparkles className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-foreground">Send Us Feedback</h3>
-                <p className="text-[11px] text-muted-foreground">Help us improve NetPulse</p>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Send Us Feedback</h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Help us improve NetPulse</p>
               </div>
             </div>
 
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1.5 rounded-lg hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors"
+              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
               aria-label="Close feedback form"
             >
               <X className="h-4 w-4" />
@@ -90,16 +90,16 @@ export function FeedbackWidget() {
           {submitted ? (
             /* Success State */
             <div className="py-6 text-center space-y-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mx-auto">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 mx-auto">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
-              <h4 className="text-base font-bold text-foreground">Thank You!</h4>
-              <p className="text-xs text-muted-foreground leading-relaxed px-4">
+              <h4 className="text-base font-bold text-slate-900 dark:text-white">Thank You!</h4>
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed px-4">
                 Your feedback has been received and emailed to our performance team.
               </p>
               <button
                 onClick={handleReset}
-                className="mt-2 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition-all shadow-md shadow-cyan-500/20"
+                className="mt-2 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-all shadow-md shadow-cyan-600/20"
               >
                 Send Another Note
               </button>
@@ -108,7 +108,7 @@ export function FeedbackWidget() {
             /* Form Body */
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               {errorMsg && (
-                <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[11px] flex items-center gap-2">
+                <div className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-600 dark:text-rose-400 text-[11px] flex items-center gap-2">
                   <AlertCircle className="h-4 w-4 flex-shrink-0" />
                   <span>{errorMsg}</span>
                 </div>
@@ -116,7 +116,7 @@ export function FeedbackWidget() {
 
               {/* Star Rating Picker */}
               <div className="space-y-1">
-                <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-muted-foreground">
+                <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Experience Rating
                 </label>
                 <div className="flex items-center gap-1">
@@ -127,18 +127,18 @@ export function FeedbackWidget() {
                       onClick={() => setRating(star)}
                       onMouseEnter={() => setHoverRating(star)}
                       onMouseLeave={() => setHoverRating(0)}
-                      className="p-1 text-amber-400 transition-transform hover:scale-110"
+                      className="p-1 transition-transform hover:scale-110"
                     >
                       <Star
                         className={`h-5 w-5 ${
                           (hoverRating || rating) >= star
                             ? "fill-amber-400 text-amber-400"
-                            : "text-muted-foreground/40"
+                            : "text-slate-300 dark:text-slate-700"
                         }`}
                       />
                     </button>
                   ))}
-                  <span className="ml-2 font-mono text-[11px] text-muted-foreground">
+                  <span className="ml-2 font-mono text-[11px] text-slate-500 dark:text-slate-400">
                     {rating}/5
                   </span>
                 </div>
@@ -146,7 +146,7 @@ export function FeedbackWidget() {
 
               {/* Category Pills */}
               <div className="space-y-1">
-                <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-muted-foreground">
+                <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Topic
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -157,8 +157,8 @@ export function FeedbackWidget() {
                       onClick={() => setCategory(cat)}
                       className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
                         category === cat
-                          ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40"
-                          : "bg-muted/50 text-muted-foreground border border-border/40 hover:text-foreground"
+                          ? "bg-cyan-50 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/40 font-bold"
+                          : "bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:text-slate-900 dark:hover:text-white"
                       }`}
                     >
                       {cat}
@@ -169,8 +169,8 @@ export function FeedbackWidget() {
 
               {/* Feedback Textarea */}
               <div className="space-y-1">
-                <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-muted-foreground">
-                  Your Message <span className="text-rose-400">*</span>
+                <label className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Your Message <span className="text-rose-500">*</span>
                 </label>
                 <textarea
                   required
@@ -178,7 +178,7 @@ export function FeedbackWidget() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Tell us what you liked or how we can improve..."
-                  className="w-full rounded-xl bg-muted/50 border border-border/60 p-3 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan-400 resize-none"
+                  className="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-cyan-500 resize-none"
                 />
               </div>
 
@@ -189,14 +189,14 @@ export function FeedbackWidget() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Name (Optional)"
-                  className="w-full rounded-xl bg-muted/50 border border-border/60 px-3 py-2 text-[11px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan-400"
+                  className="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 text-[11px] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-cyan-500"
                 />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email (Optional)"
-                  className="w-full rounded-xl bg-muted/50 border border-border/60 px-3 py-2 text-[11px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan-400"
+                  className="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 text-[11px] text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
@@ -204,7 +204,7 @@ export function FeedbackWidget() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition-all shadow-lg shadow-cyan-500/20 active:scale-95 disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-all shadow-md shadow-cyan-600/20 active:scale-95 disabled:opacity-50"
               >
                 {loading ? (
                   "Sending..."
@@ -223,7 +223,7 @@ export function FeedbackWidget() {
       {/* Floating Bottom-Right Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group relative flex items-center gap-2.5 px-4 py-3 rounded-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs tracking-wide shadow-xl shadow-cyan-500/30 border border-cyan-300/40 hover:scale-105 active:scale-95 transition-all duration-200"
+        className="group relative flex items-center gap-2.5 px-4 py-3 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs tracking-wide shadow-xl shadow-cyan-600/30 border border-cyan-400/40 hover:scale-105 active:scale-95 transition-all duration-200"
         aria-label="Toggle feedback form"
       >
         <MessageSquare className="h-4 w-4 stroke-[2.5]" />

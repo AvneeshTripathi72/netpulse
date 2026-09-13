@@ -1,49 +1,49 @@
 import Link from "next/link";
 import { SpeedTestCard } from "@/components/speed-test/speed-test-card";
 import { NetworkInfoCard } from "@/components/network/network-info";
-import { Zap, History, Shield, Gauge, Cpu } from "lucide-react";
+import { Zap, History, Gauge, Shield, Activity, BarChart2 } from "lucide-react";
 
 export default function HomePage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
-      {/* Hero Section */}
-      <div className="text-center max-w-3xl mx-auto space-y-4">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-semibold tracking-wide uppercase">
+    <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
+      {/* Clean Hero Section */}
+      <div className="text-center max-w-2xl mx-auto space-y-3">
+        {/* Simple Badge */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-50 dark:bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/20 text-xs font-semibold uppercase tracking-wide">
           <Zap className="h-3.5 w-3.5" />
-          Internet Performance Test
+          Fast & Accurate Speed Test
         </div>
 
-        {/* Heading */}
-        <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-foreground">
-          Test your internet speed in <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400">seconds.</span>
+        {/* Crisp Heading */}
+        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white">
+          Test your internet speed in seconds.
         </h1>
 
         {/* Subheading */}
-        <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-          Measure your download speed, upload speed, ping, jitter, and connection quality with a fast browser-based network engine.
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+          Measure your download speed, upload speed, ping latency, and jitter with a fast, ad-free browser test.
         </p>
 
-        {/* Quick CTA Links */}
-        <div className="flex items-center justify-center gap-4 pt-2">
+        {/* Navigation CTAs */}
+        <div className="flex items-center justify-center gap-3 pt-2">
           <Link
             href="/history"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-muted/60 hover:bg-muted text-foreground border border-border/60 font-semibold text-sm transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 font-semibold text-xs transition-colors shadow-sm"
           >
-            <History className="h-4 w-4" />
+            <History className="h-4 w-4 text-cyan-600" />
             View History
           </Link>
           <Link
-            href="/diagnostics"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-muted/60 hover:bg-muted text-foreground border border-border/60 font-semibold text-sm transition-colors"
+            href="/dashboard"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 font-semibold text-xs transition-colors shadow-sm"
           >
-            <Cpu className="h-4 w-4" />
-            Diagnostics
+            <BarChart2 className="h-4 w-4 text-cyan-600" />
+            Analytics
           </Link>
         </div>
       </div>
 
-      {/* Main Speed Test Centerpiece */}
+      {/* Main Centerpiece Speed Test Dashboard */}
       <SpeedTestCard />
 
       {/* Network Specs Info Card */}
@@ -51,35 +51,35 @@ export default function HomePage() {
         <NetworkInfoCard />
       </div>
 
-      {/* Feature Highlights Grid */}
-      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
-        <div className="glass-panel p-6 rounded-2xl border border-border/60 space-y-2">
-          <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 w-fit">
+      {/* Simple 3 Feature Cards */}
+      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5 pt-4">
+        <div className="glass-panel p-5 rounded-2xl space-y-2">
+          <div className="p-2 rounded-xl bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 w-fit">
             <Gauge className="h-5 w-5" />
           </div>
-          <h3 className="text-base font-bold text-foreground">Real Network Engine</h3>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Multi-stream binary byte transfer accurately measures throughput without synthetic or random placeholders.
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Real Throughput</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            Multi-stream binary byte transfer measures real connection capacity without synthetic numbers.
           </p>
         </div>
 
-        <div className="glass-panel p-6 rounded-2xl border border-border/60 space-y-2">
-          <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 w-fit">
-            <History className="h-5 w-5" />
+        <div className="glass-panel p-5 rounded-2xl space-y-2">
+          <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 w-fit">
+            <Activity className="h-5 w-5" />
           </div>
-          <h3 className="text-base font-bold text-foreground">Test History & Trends</h3>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Automatically track past test records, export summaries, and compare network fluctuations across devices.
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Ping & Jitter</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            Continuous round-trip sampling measures network responsiveness and packet stability.
           </p>
         </div>
 
-        <div className="glass-panel p-6 rounded-2xl border border-border/60 space-y-2">
-          <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 w-fit">
+        <div className="glass-panel p-5 rounded-2xl space-y-2">
+          <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 w-fit">
             <Shield className="h-5 w-5" />
           </div>
-          <h3 className="text-base font-bold text-foreground">Privacy-First Architecture</h3>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Payloads are discarded immediately after calculation. No personal data retention or background tracking.
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Private & Safe</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            No software installation required. Test data stays in your browser and payloads are discarded.
           </p>
         </div>
       </div>

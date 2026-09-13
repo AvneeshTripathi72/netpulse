@@ -33,7 +33,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-background font-sans antialiased flex flex-col bg-radial-gradient">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

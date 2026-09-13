@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { NetworkInfo as NetworkInfoType } from "@/types/speed-test";
-import { Wifi, Globe, Server, Shield, Radio } from "lucide-react";
+import { Wifi, Globe, Server, Radio } from "lucide-react";
 
 export function NetworkInfoCard() {
   const [info, setInfo] = useState<NetworkInfoType | null>(null);
@@ -14,7 +14,6 @@ export function NetworkInfoCard() {
         browserOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
       };
 
-      // Read Network Information API if available
       if (typeof navigator !== "undefined" && "connection" in navigator) {
         const conn = (navigator as any).connection;
         if (conn) {
@@ -26,7 +25,6 @@ export function NetworkInfoCard() {
         }
       }
 
-      // Fetch IP / ISP info from Next.js route
       try {
         const res = await fetch("/api/network");
         if (res.ok) {
@@ -48,69 +46,69 @@ export function NetworkInfoCard() {
   }, []);
 
   return (
-    <div className="glass-panel p-6 rounded-2xl border border-border/70 space-y-4">
-      <div className="flex items-center justify-between border-b border-border/50 pb-3">
+    <div className="glass-panel p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-400">
+          <div className="p-2 rounded-xl bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
             <Radio className="h-4 w-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-foreground">Browser Network Specs</h3>
-            <p className="text-[11px] text-muted-foreground">Local connection & ISP telemetry</p>
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Network Details</h3>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">Browser Network API telemetry</p>
           </div>
         </div>
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-medium">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 text-xs font-mono font-medium">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
           Connected
         </span>
       </div>
 
       {loading ? (
-        <div className="py-6 text-center text-xs font-mono text-muted-foreground animate-pulse">
-          Querying browser Network API...
+        <div className="py-4 text-center text-xs font-mono text-slate-400 animate-pulse">
+          Loading network details...
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1">
           {/* Connection Type */}
           <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground uppercase">
-              <Wifi className="h-3.5 w-3.5 text-cyan-400" />
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">
+              <Wifi className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
               Connection
             </div>
-            <div className="text-sm font-bold font-mono text-foreground">
+            <div className="text-sm font-bold font-mono text-slate-900 dark:text-white">
               {info?.effectiveType || "4G / Wi-Fi"}
             </div>
           </div>
 
           {/* Downlink Estimate */}
           <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground uppercase">
-              <Radio className="h-3.5 w-3.5 text-cyan-400" />
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">
+              <Radio className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
               Downlink Est.
             </div>
-            <div className="text-sm font-bold font-mono text-foreground">
+            <div className="text-sm font-bold font-mono text-slate-900 dark:text-white">
               {info?.downlink ? `${info.downlink} Mbps` : "Available"}
             </div>
           </div>
 
           {/* IP Address */}
           <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground uppercase">
-              <Globe className="h-3.5 w-3.5 text-cyan-400" />
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">
+              <Globe className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
               IP Address
             </div>
-            <div className="text-sm font-bold font-mono text-foreground truncate">
+            <div className="text-sm font-bold font-mono text-slate-900 dark:text-white truncate">
               {info?.ip || "Detected"}
             </div>
           </div>
 
           {/* ISP Info */}
           <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground uppercase">
-              <Server className="h-3.5 w-3.5 text-cyan-400" />
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">
+              <Server className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
               ISP / Provider
             </div>
-            <div className="text-sm font-bold font-mono text-foreground truncate">
+            <div className="text-sm font-bold font-mono text-slate-900 dark:text-white truncate">
               {info?.isp || "Local Provider"}
             </div>
           </div>
